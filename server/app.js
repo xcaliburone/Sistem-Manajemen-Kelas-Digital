@@ -15,17 +15,17 @@ app.use(express.json());
 app.use(cors());
 
 // const connection = mysql.createConnection({ host: 'localhost', user: 'root', password: '', database: 'rexdinner' });
-// const connection = createConnection({
-//     host: process.env.DB_HOST || 'localhost',
-//     user: process.env.DB_USER || 'root',
-//     password: process.env.DB_PASSWORD || '',
-//     database: process.env.DB_NAME || 'smkd'
-// });
+const connection = createConnection({
+    host: process.env.DB_HOST || 'localhost',
+    user: process.env.DB_USER || 'root',
+    password: process.env.DB_PASSWORD || '',
+    database: process.env.DB_NAME || 'smkd'
+});
 
-// connection.connect((err) => {
-//     if (err) throw err;
-//     console.log('Connected to MySQL Rex`s Dinner Database');
-// });
+connection.connect((err) => {
+    if (err) throw err;
+    console.log('Connected to MySQL SMKD Database');
+});
 
 app.get('/', (req, res) => {
     res.json({ message: 'Ini root' });
