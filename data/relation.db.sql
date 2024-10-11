@@ -3,7 +3,7 @@ USE `smkd`;
 CREATE TABLE IF NOT EXISTS `guru_mapel` (
     `nip_guru` VARCHAR(18) NOT NULL,
     `id_mapel` VARCHAR(36) NOT NULL,
-    PRIMARY KEY (`nip`, `mapel_id`),
+    PRIMARY KEY (`nip_guru`, `mapel_id`),
     -- UNIQUE KEY `unique_guru_mapel` (`nip_guru`, `id_mapel`)
     KEY `nip_guru_gurumapel` (`nip_guru`),
     KEY `id_mapel_gurumapel` (`id_mapel`),
