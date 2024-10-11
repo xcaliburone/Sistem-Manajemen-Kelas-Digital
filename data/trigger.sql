@@ -1,11 +1,71 @@
--- Trigger untuk membuat ID dengan format AB001
-DELIMITER //
-CREATE TRIGGER before_insert_absen
+-- MATA PELAJARAN
+DELIMITER $$
+CREATE TRIGGER `before_insert_mata_pelajaran`
+BEFORE INSERT ON `mata_pelajaran`
+FOR EACH ROW
+BEGIN
+    IF NEW.id IS NULL OR NEW.id = '' THEN
+        SET NEW.id = CONCAT('MP', UUID());
+    END IF;
+END$$
+DELIMITER ;
+
+-- KELAS
+DELIMITER $$
+CREATE TRIGGER `before_insert_kelas`
+BEFORE INSERT ON `kelas`
+FOR EACH ROW
+BEGIN
+    IF NEW.id IS NULL OR NEW.id = '' THEN
+        SET NEW.id = CONCAT('KL', UUID());
+    END IF;
+END$$
+DELIMITER ;
+
+-- ABSEN
+DELIMITER $$
+CREATE TRIGGER `before_insert_absen`
 BEFORE INSERT ON `absen`
 FOR EACH ROW
 BEGIN
-    SET NEW.id = CONCAT('AB', LPAD(NEW.id_auto, 3, '0'));  -- Membuat ID dengan format AB001
-END//
+    IF NEW.id IS NULL OR NEW.id = '' THEN
+        SET NEW.id = CONCAT('AB', UUID());
+    END IF;
+END$$
 DELIMITER ;
 
-a
+-- PENILAIAN
+DELIMITER $$
+CREATE TRIGGER `before_insert_penilaian`
+BEFORE INSERT ON `penilaian`
+FOR EACH ROW
+BEGIN
+    IF NEW.id IS NULL OR NEW.id = '' THEN
+        SET NEW.id = CONCAT('NL', UUID());
+    END IF;
+END$$
+DELIMITER ;
+
+-- TUGAS
+DELIMITER $$
+CREATE TRIGGER `before_insert_tugas`
+BEFORE INSERT ON `tugas`
+FOR EACH ROW
+BEGIN
+    IF NEW.id IS NULL OR NEW.id = '' THEN
+        SET NEW.id = CONCAT('TG', UUID());
+    END IF;
+END$$
+DELIMITER ;
+
+-- MATERI
+DELIMITER $$
+CREATE TRIGGER `before_insert_materi`
+BEFORE INSERT ON `materi`
+FOR EACH ROW
+BEGIN
+    IF NEW.id IS NULL OR NEW.id = '' THEN
+        SET NEW.id = CONCAT('MT', UUID());
+    END IF;
+END$$
+DELIMITER ;
