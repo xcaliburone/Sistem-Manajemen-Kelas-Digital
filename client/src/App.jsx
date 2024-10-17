@@ -24,7 +24,6 @@ function Login() {
             if (data.success) {
                 const employeeId = data.employeeId;
                 const role = data.role;
-                // Navigasi ke dashboard dengan peran
                 navigate(`/dashboard/${employeeId}?role=${role}`);
             } else {
                 alert(data.message);
