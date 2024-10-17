@@ -68,7 +68,6 @@ app.post('/signin', (req, res) => {
                         role: 'siswa'
                     });
                 } else {
-                    // Jika tidak ditemukan di kedua tabel
                     return res.json({ success: false, message: 'ID atau password salah' });
                 }
             });
@@ -78,6 +77,35 @@ app.post('/signin', (req, res) => {
 
 app.post('/signup', (req, res) => {
     res.json({ message: 'Ini SignUp' });
+});
+
+app.get('/user/:employeeId', (req, res) => {
+    const { employeeId } = req.params;
+
+    const queryGuru = 'SELECT nama FROM guru WHERE nip = ?';
+    connection.query(queryGuru, [employeeId], (err, guruResults) => {
+        if (err) {
+            console.error(err);
+            return res.status(500).json({ success: false, message: 'Internal server error' });
+        }
+
+        if (guruResults.length > 0) {
+            return res.json({ nama: guruResults[0].nama, role: 'guru' });
+        } else {
+            const querySiswa = 'SELECT nama FROM siswa WHERE nisn = ?';
+            connection.query(querySiswa, [employeeId], (err, siswaResults) => {
+                if (err) {
+                    console.error(err);
+                    return res.status(500).json({ success: false, message: 'Internal server error' });
+                }
+                if (siswaResults.length > 0) {
+                    return res.json({ nama: siswaResults[0].nama, role: 'siswa' });
+                } else {
+                    return res.status(404).json({ success: false, message: 'User not found' });
+                }
+            });
+        }
+    });
 });
 
 app.listen(port, () => {
