@@ -1,4 +1,4 @@
-import express from 'express';
+import express, { json } from 'express';
 import { createConnection } from 'mysql2';
 import cors from 'cors';
 import path from 'path';
@@ -33,7 +33,47 @@ app.get('/', (req, res) => {
 });
 
 app.post('/signin', (req, res) => {
-    res.json({ message: 'Ini SignIn' });
+    const { ID, password} = req.body;
+
+    // cek di tabel guru kocak
+    const guruQuery = 'SELECT * FROM guru WHERE nip = ? AND password = ?';
+    connection.query(guruQuery, [ID, password], (err, guruResults) => {
+        if(err) {
+            console.error(err);
+            return res.status(500),json({ success: false, message: 'Internal Server Error' })
+        }
+
+        if(guruResults.length > 0) {
+            return res.json({
+                success: true,
+                message: 'Login Berhasil Sebagai Guri',
+                employeeId: guruResults[0].nip,
+                role: 'guru'
+            });
+        } else {
+            // cek di tabel siswa aja
+            const siswaQuery = 'SELECT * FROM siswa WHERE nisn = ? AND password = ?';
+            connection.query(querySiswa, [ID, password], (err, siswaResults) => {
+                if (err) {
+                    console.error(err);
+                    return res.status(500).json({ success: false, message: 'Internal server error' });
+                }
+
+                if (siswaResults.length > 0) {
+                    // Jika ditemukan di tabel siswa
+                    return res.json({
+                        success: true,
+                        message: 'Login berhasil sebagai Siswa',
+                        employeeId: siswaResults[0].nisn, // Mengirim NISN sebagai ID unik
+                        role: 'siswa'
+                    });
+                } else {
+                    // Jika tidak ditemukan di kedua tabel
+                    return res.json({ success: false, message: 'ID atau password salah' });
+                }
+            });
+        }
+    });
 });
 
 app.post('/signup', (req, res) => {
