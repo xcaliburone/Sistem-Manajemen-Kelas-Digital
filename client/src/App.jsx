@@ -12,15 +12,28 @@ function Login() {
     const handleLogin = async (e) => {
         e.preventDefault();
         console.log(`ID: ${ID}, Password: ${password}`);
-        const response = await fetch('http://localhost:3032/login', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ ID, password })
-        });
-        const data = await response.json();
-        if (data.success) { const employeeId = data.employeeId; navigate(`/dashboard/${employeeId}`);
-        } else { alert(data.message); }
-    }
+        
+        try {
+            const response = await fetch('http://localhost:3048/signin', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ ID, password })
+            });
+    
+            const data = await response.json();
+            if (data.success) {
+                const employeeId = data.employeeId;
+                const role = data.role;
+                // Navigasi ke dashboard dengan peran
+                navigate(`/dashboard/${employeeId}?role=${role}`);
+            } else {
+                alert(data.message);
+            }
+        } catch (error) {
+            console.error('Error during login:', error);
+            alert('Error connecting to server.');
+        }
+    }    
 
     return (
         <>
